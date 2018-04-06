@@ -2,26 +2,34 @@ IP_REGEX = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9]
 
 const { execFile } = require('child_process');
 
-//just prints the firewall status
 var ModSecWinAPI = function() {
         this.async = function(ipList) {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + "is a valid IP");
                                 //TODO check ip is already in ModSecBlockedIPs?
-                                //TODOhere execFile('netsh', ['advfirewall', 'add', 'rule', 'name="ModSecBlockedIPs"', 'protocol=any', 'dir=in', 'action=block', 'remoteip=ipList[i]'], (error...
+                                //add to rule: it might not work (UNTESTED)
+                                execFile('netsh', ['advfirewall', 'add', 'rule', 'name="ModSecBlockedIPs"', 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (error, stdout, stderr) => {
+                                if(error) {
+                                        console.log("Error!");
+                                                throw error;
+                                        }
+                                console.log(stdout);
+                                });
                         } else {
                                 console.log(ipList[i] + "is not a valid IP, bypassing");       
                         }
-                } 
-
-                execFile('netsh', ['advfirewall', 'show', 'allprofiles'], (error, stdout, stderr) => {
-                if(error) {
-                        console.log("Error!");
-                        throw error;
                 }
-                        console.log(stdout);
-                });
+                
+                //just prints the firewall status (exec command example)
+
+                //execFile('netsh', ['advfirewall', 'show', 'allprofiles'], (error, stdout, stderr) => {
+                //if(error) {
+                //        console.log("Error!");
+                //        throw error;
+                //}
+                //       console.log(stdout);
+                //});
         }
 }
 
