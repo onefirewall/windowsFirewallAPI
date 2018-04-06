@@ -5,9 +5,14 @@ const { execFile } = require('child_process');
 //just prints the firewall status
 var ModSecWinAPI = function() {
         this.async = function(ipList) {
-                if("192.168.1.2".match(IP_REGEX)) {
-                        console.log("entry match example!");
-                }
+                for (i = 0; i < ipList.length; i++) {
+                        if(ipList[i].match(IP_REGEX)) {
+                                console.log(ipList[i] + "is a valid IP");
+                        } else {
+                                console.log(ipList[i] + "is not a valid IP, bypassing");       
+                        }
+                } 
+
                 execFile('netsh', ['advfirewall', 'show', 'allprofiles'], (error, stdout, stderr) => {
                 if(error) {
                         console.log("Error!");
