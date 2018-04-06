@@ -8,6 +8,8 @@ var ModSecWinAPI = function() {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + "is a valid IP");
+                                //TODO check ip is already in ModSecBlockedIPs?
+                                //TODOhere execFile('netsh', ['advfirewall', 'add', 'rule', 'name="ModSecBlockedIPs"', 'protocol=any', 'dir=in', 'action=block', 'remoteip=ipList[i]'], (error...
                         } else {
                                 console.log(ipList[i] + "is not a valid IP, bypassing");       
                         }
