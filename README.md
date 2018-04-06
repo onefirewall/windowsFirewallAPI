@@ -6,6 +6,9 @@
 node example.js
 
 TODO:
+
+-correct Regex
+
 -Return codes
 
 -Add
