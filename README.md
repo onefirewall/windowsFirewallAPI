@@ -6,6 +6,8 @@
 node example.js
 
 TODO:
+-Return codes
+
 -Add
 Arguments passed as array/list, foreach entry regex (IPv4/IPv6)
 if !match remove or ignore
