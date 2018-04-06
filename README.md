@@ -3,15 +3,12 @@
 #First tries
 
 #To execute
-node example.js
+node app.js
 
 TODO:
 
--Return codes
+-Return codes (now only prints)
 
--Add
-Arguments passed as array/list, foreach entry regex (IPv4/IPv6)
-if !match remove or ignore
-otherwise add to rule with netsh advfirewall
+-Add to test
 
 -Delete eventually
