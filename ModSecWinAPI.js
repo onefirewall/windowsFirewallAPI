@@ -13,7 +13,7 @@ var ModSecWinAPI = function() {
                                 execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + MODSECPREFIX + ipList[i]], (error, stdout, stderr) => {
                                         if(error) {
                                                 if(stdout.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP check!);
+                                                        console.log("Error on IP check!");
                                                         throw error;
                                                 }
                                                 console.log("Rule for IP does not already exist, adding " + ipList[i] + " in rule " + MODSECPREFIX + ipList[i]);
