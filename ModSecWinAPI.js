@@ -39,26 +39,19 @@ var ModSecWinAPI = function() {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + " is a valid IP");
-                                //check ip is present in ModSEC rules
-                                execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + MODSECPREFIX + ipList[i]], (error, stdout, stderr) => {
-                                        if(error) {
-                                                if(stdout.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP check!");
-                                                        throw error;
-                                                }
-                                                console.log("Rule for IP " + ipList[i] + " does not exist, ignoring this entry");
-                                                continue;
-                                        }
-                                        console.log("Deleting rule " + MODSECPREFIX + ipList[i]);
-                                        //delete rule: it might not work (UNTESTED)
-                                        execFile('netsh', ['advfirewall', 'delete', 'rule', 'name='+ MODSECPREFIX + ipList[i]], (errorDelete, stdoutDelete, stderrDelete) => {
-                                                if(errorDelete) {
+                                //delete rule: it might not work (UNTESTED)
+                                console.log("Deleting rule " + MODSECPREFIX + ipList[i]);
+                                execFile('netsh', ['advfirewall', 'delete', 'rule', 'name='+ MODSECPREFIX + ipList[i]], (errorDelete, stdoutDelete, stderrDelete) => {
+                                        if(errorDelete) {
+                                                if(stdoutDelete.indexOf("No rules match") < 0) {
                                                         console.log("Error on IP deleting!");
                                                         throw errorDelete;
                                                 }
-                                                console.log("Successfully deleted " + MODSECPREFIX + ipList[i]);
-                                                console.log(stdoutDelete);
-                                        });
+                                                console.log("Rule " + MODSECPREFIX + ipList[i] + " does not exist, bypassing");
+                                                continue;
+                                        }
+                                        console.log("Successfully deleted " + MODSECPREFIX + ipList[i]);
+                                        console.log(stdoutDelete);
                                 });
                         } else {
                                 console.log(ipList[i] + " is not a valid IP, bypassing");       
