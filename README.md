@@ -5,5 +5,4 @@ node app.js
 
 TODO:
 -Return codes (now only prints)
--Add to test
--Delete eventually
+-Add/delete (commented) to test
