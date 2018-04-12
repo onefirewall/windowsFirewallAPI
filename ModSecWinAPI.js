@@ -18,7 +18,7 @@ var ModSecWinAPI = function() {
                                                 }
                                                 console.log("Rule for IP does not already exist, adding " + ipList[i] + " in rule " + MODSECPREFIX + ipList[i]);
                                                 //add rule: it might not work (UNTESTED)
-                                                execFile('netsh', ['advfirewall', 'add', 'rule', 'name='+ MODSECPREFIX + ipList[i], 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (errorAdd, stdoutAdd, stderrAdd) => {
+                                                execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ MODSECPREFIX + ipList[i], 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (errorAdd, stdoutAdd, stderrAdd) => {
                                                         if(errorAdd) {
                                                                 console.log("Error on IP adding!");
                                                                 throw errorAdd;
@@ -41,7 +41,7 @@ var ModSecWinAPI = function() {
                                 console.log(ipList[i] + " is a valid IP");
                                 //delete rule: it might not work (UNTESTED)
                                 console.log("Deleting rule " + MODSECPREFIX + ipList[i]);
-                                execFile('netsh', ['advfirewall', 'delete', 'rule', 'name='+ MODSECPREFIX + ipList[i]], (errorDelete, stdoutDelete, stderrDelete) => {
+                                execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ MODSECPREFIX + ipList[i]], (errorDelete, stdoutDelete, stderrDelete) => {
                                         if(errorDelete) {
                                                 if(stdoutDelete.indexOf("No rules match") < 0) {
                                                         console.log("Error on IP deleting!");
