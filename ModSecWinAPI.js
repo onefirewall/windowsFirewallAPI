@@ -18,14 +18,14 @@ var ModSecWinAPI = function() {
                                 execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + ipRuleNameIn], (errorIn, stdoutIn, stderrIn) => {
                                         if(errorIn) {
                                                 if(stdoutIn.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[pos] + " check!");
+                                                        console.log("Error on rule " + ipRuleNameIn + " check!");
                                                         throw errorIn;
                                                 }
                                                 console.log("Rule for IP does not already exist, adding " + ipList[pos] + " in rule " + ipRuleNameIn);
                                                 //add rule IN: it might not work (UNTESTED)
                                                 execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleNameIn, 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[pos]], (errorAddIn, stdoutAddIn, stderrAddIn) => {
                                                         if(errorAddIn) {
-                                                                console.log("Error on IP " + ipList[pos] + " adding inbound!");
+                                                                console.log("Error on rule " + ipRuleNameIn + " adding inbound!");
                                                                 //throw errorAddIn;
                                                         }
                                                         console.log("Successfully added inbound " + ipRuleNameIn);
@@ -37,14 +37,14 @@ var ModSecWinAPI = function() {
                                 execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + ipRuleNameOut], (errorOut, stdoutOut, stderrOut) => {
                                         if(errorOut) {
                                                 if(stdoutOut.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[pos] + " check!");
+                                                        console.log("Error on rule " + ipRuleNameOut + " check!");
                                                         throw error;
                                                 }
                                                 console.log("Rule for IP does not already exist, adding " + ipList[pos] + " in rule " + ipRuleNameOut);
                                                 //add rule OUT: it might not work (UNTESTED)
                                                 execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleNameOut, 'protocol=any', 'dir=out', 'action=block', 'remoteip=' + ipList[pos]], (errorAddOut, stdoutAddOut, stderrAddOut) => {
                                                         if(errorAddOut) {
-                                                                console.log("Error on IP " + ipList[pos] + " adding outbound!");
+                                                                console.log("Error on rule " + ipRuleNameOut + " adding outbound!");
                                                                 //throw errorAddOut;
                                                         }
                                                         console.log("Successfully added outbound " + ipRuleNameOut);
@@ -73,7 +73,7 @@ var ModSecWinAPI = function() {
                                 execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ ipRuleNameIn], (errorDelete, stdoutDelete, stderrDelete) => {
                                         if(errorDelete) {
                                                 if(stdoutDelete.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[pos] + " deleting!");
+                                                        console.log("Error on rule " + ipRuleNameIn + " deleting!");
                                                         throw errorDelete;
                                                 }
                                                 console.log("Rule " + ipRuleNameIn + " does not exist, bypassing");
@@ -86,7 +86,7 @@ var ModSecWinAPI = function() {
                                 execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ ipRuleNameOut], (errorDelete, stdoutDelete, stderrDelete) => {
                                         if(errorDelete) {
                                                 if(stdoutDelete.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[pos] + " deleting!");
+                                                        console.log("Error on rule " + ipRuleNameOut + " deleting!");
                                                         throw errorDelete;
                                                 }
                                                 console.log("Rule " + ipRuleNameOut + " does not exist, bypassing");
