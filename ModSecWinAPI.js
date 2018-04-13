@@ -9,52 +9,54 @@ var ModSecWinAPI = function() {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + " is a valid IP");
+                                var ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
                                 //check ip is already added to ModSEC rules
-                                execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + MODSECPREFIX + ipList[i]], (error, stdout, stderr) => {
+                                execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + ipRuleName], (error, stdout, stderr) => {
                                         if(error) {
                                                 if(stdout.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP check!");
+                                                        console.log("Error on IP " + ipList[i] + " check!");
                                                         throw error;
                                                 }
-                                                console.log("Rule for IP does not already exist, adding " + ipList[i] + " in rule " + MODSECPREFIX + ipList[i]);
+                                                console.log("Rule for IP does not already exist, adding " + ipList[i] + " in rule " + ipRuleName);
                                                 //add rule: it might not work (UNTESTED)
-                                                execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ MODSECPREFIX + ipList[i], 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (errorAdd, stdoutAdd, stderrAdd) => {
+                                                execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleName, 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (errorAdd, stdoutAdd, stderrAdd) => {
                                                         if(errorAdd) {
-                                                                console.log("Error on IP adding!");
+                                                                console.log("Error on IP " + ipList[i] + " adding!");
                                                                 throw errorAdd;
                                                         }
-                                                        console.log("Successfully added " + MODSECPREFIX + ipList[i]);
+                                                        console.log("Successfully added " + ipRuleName);
                                                         console.log(stdoutAdd);
                                                 });
                                         }
                                 });
                         } else {
-                                console.log(ipList[i] + " is not a valid IP, bypassing");       
+                                console.log(ipList[i] + " is not a valid IP, bypassing");
                         }
                 }
         }
-        
+
         //Delete blocked IPs function
         this.deleteIPs = function(ipList) {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + " is a valid IP");
+                                var ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
                                 //delete rule: it might not work (UNTESTED)
-                                console.log("Deleting rule " + MODSECPREFIX + ipList[i]);
-                                execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ MODSECPREFIX + ipList[i]], (errorDelete, stdoutDelete, stderrDelete) => {
+                                console.log("Deleting rule " + ipRuleName);
+                                execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ ipRuleName], (errorDelete, stdoutDelete, stderrDelete) => {
                                         if(errorDelete) {
                                                 if(stdoutDelete.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP deleting!");
+                                                        console.log("Error on IP " + ipList[i] + " deleting!");
                                                         throw errorDelete;
                                                 }
-                                                console.log("Rule " + MODSECPREFIX + ipList[i] + " does not exist, bypassing");
-                                                continue;
+                                                console.log("Rule " + ipRuleName + " does not exist, bypassing");
+                                                return true;
                                         }
-                                        console.log("Successfully deleted " + MODSECPREFIX + ipList[i]);
+                                        console.log("Successfully deleted " + ipRuleName);
                                         console.log(stdoutDelete);
                                 });
                         } else {
-                                console.log(ipList[i] + " is not a valid IP, bypassing");       
+                                console.log(ipList[i] + " is not a valid IP, bypassing");
                         }
                 }
         }
