@@ -24,7 +24,7 @@ var ModSecWinAPI = function() {
                                                 execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleName, 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[pos]], (errorAdd, stdoutAdd, stderrAdd) => {
                                                         if(errorAdd) {
                                                                 console.log("Error on IP " + ipList[pos] + " adding!");
-                                                                throw errorAdd;
+                                                                //throw errorAdd;
                                                         }
                                                         console.log("Successfully added " + ipRuleName);
                                                         console.log(stdoutAdd);
