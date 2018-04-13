@@ -9,19 +9,21 @@ var ModSecWinAPI = function() {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + " is a valid IP");
-                                var ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
+                                //declare internal iterator position for execDir
+                                let pos = i;
+                                let ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
                                 //check ip is already added to ModSEC rules
                                 execFile('netsh', ['advfirewall', 'firewall','show', 'rule', 'name=' + ipRuleName], (error, stdout, stderr) => {
                                         if(error) {
                                                 if(stdout.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[i] + " check!");
+                                                        console.log("Error on IP " + ipList[pos] + " check!");
                                                         throw error;
                                                 }
-                                                console.log("Rule for IP does not already exist, adding " + ipList[i] + " in rule " + ipRuleName);
+                                                console.log("Rule for IP does not already exist, adding " + ipList[pos] + " in rule " + ipRuleName);
                                                 //add rule: it might not work (UNTESTED)
-                                                execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleName, 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[i]], (errorAdd, stdoutAdd, stderrAdd) => {
+                                                execFile('netsh', ['advfirewall', 'firewall', 'add', 'rule', 'name='+ ipRuleName, 'protocol=any', 'dir=in', 'action=block', 'remoteip=' + ipList[pos]], (errorAdd, stdoutAdd, stderrAdd) => {
                                                         if(errorAdd) {
-                                                                console.log("Error on IP " + ipList[i] + " adding!");
+                                                                console.log("Error on IP " + ipList[pos] + " adding!");
                                                                 throw errorAdd;
                                                         }
                                                         console.log("Successfully added " + ipRuleName);
@@ -40,13 +42,15 @@ var ModSecWinAPI = function() {
                 for (i = 0; i < ipList.length; i++) {
                         if(ipList[i].match(IP_REGEX)) {
                                 console.log(ipList[i] + " is a valid IP");
-                                var ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
+                                //declare internal iterator position for execDir
+                                let pos = i;
+                                let ipRuleName =  MODSECPREFIX + ipList[i].replace(/:/g,"_");
                                 //delete rule: it might not work (UNTESTED)
                                 console.log("Deleting rule " + ipRuleName);
                                 execFile('netsh', ['advfirewall', 'firewall', 'delete', 'rule', 'name='+ ipRuleName], (errorDelete, stdoutDelete, stderrDelete) => {
                                         if(errorDelete) {
                                                 if(stdoutDelete.indexOf("No rules match") < 0) {
-                                                        console.log("Error on IP " + ipList[i] + " deleting!");
+                                                        console.log("Error on IP " + ipList[pos] + " deleting!");
                                                         throw errorDelete;
                                                 }
                                                 console.log("Rule " + ipRuleName + " does not exist, bypassing");
